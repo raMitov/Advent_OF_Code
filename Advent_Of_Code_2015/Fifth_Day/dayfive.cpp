@@ -18,23 +18,23 @@ bool ThreeVowels(std::string& line){
     for(int i = 0; i < len; i++){
         if(line[i] == 'a' && !afound){
             vowew++;
-            afound;
+            afound = true;
         }
         else if(line[i] == 'e' && !efound){
             vowew++;
-            efound;
+            efound = true;
         }
         else if(line[i] == 'i' && !ifound){
             vowew++;
-            ifound;
+            ifound = true;
         }
         else if(line[i] == 'o' && !ofound){
             vowew++;
-            ofound;
+            ofound = true;
         }
         else if(line[i] == 'u' && !ufound){
             vowew++;
-            ufound;
+            ufound = true;
         }
     }
     if(vowew >= 3) return true;
@@ -73,17 +73,25 @@ bool containsStrings(std::string& line){
     
 }
 
-int numberOfNice(std::ifstream& input){
+int numberOfNice(std::ifstream& input, std::ofstream & output){
     bool hasThreeVowels = false;
     bool hasDoubleLetter = false;
-    bool containsString = false;
+    bool containsString = true;
     std::string line;
     int count = 0;
     while(getline(input, line, '\n')){
+        hasDoubleLetter = false;
+        hasThreeVowels = false;
+        containsString = true;
         hasThreeVowels = ThreeVowels(line);
+        //if(!hasThreeVowels) continue;
         hasDoubleLetter = twiceInARow(line);
+        //if(!hasDoubleLetter) continue;
         containsString = containsStrings(line);
         if(hasThreeVowels && hasDoubleLetter && !containsString) count++;
+        output << line << std::to_string(hasThreeVowels) << " " << std::to_string(hasDoubleLetter) << " "
+        << std::to_string(containsString) << "\n";
+       
     }
 
 
@@ -93,7 +101,10 @@ int numberOfNice(std::ifstream& input){
 int main(){
 
     std::ifstream input("input.txt");
+    std::ofstream outfile("outputDEBUGGING.txt", std::ios::app);
+    std::cout << numberOfNice(input, outfile) << std::endl;
 
-
+    input.close();
+    outfile.close();
     return 0;
 }
