@@ -2,109 +2,51 @@
 #include <fstream>
 #include <string>
 
-#define s1 "ab"
-#define s2 "cd"
-#define s3 "pq"
-#define s4 "xy"
-
-bool ThreeVowels(std::string& line){
-    int len = line.length();
-    bool afound = false;
-    bool efound = false;
-    bool ifound = false;
-    bool ofound = false;
-    bool ufound = false;
-    int vowew = 0;
-    for(int i = 0; i < len; i++){
-        if(line[i] == 'a' && !afound){
-            vowew++;
-            afound = true;
-        }
-        else if(line[i] == 'e' && !efound){
-            vowew++;
-            efound = true;
-        }
-        else if(line[i] == 'i' && !ifound){
-            vowew++;
-            ifound = true;
-        }
-        else if(line[i] == 'o' && !ofound){
-            vowew++;
-            ofound = true;
-        }
-        else if(line[i] == 'u' && !ufound){
-            vowew++;
-            ufound = true;
+bool ThreeVowels(std::string& line) {
+    int vowels = 0;
+    for (char c : line) {
+        if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
+            vowels++;
         }
     }
-    if(vowew >= 3) return true;
-    else return false;
+    return vowels >= 3;
 }
-//look into this this may not work because i dont know if i get only certain letters only twice
+
 bool twiceInARow(std::string& line){
-    int len = line.length();
-    for(int i = 0; i < len; i++){
-        for(int j = i+1; j < len; j++){
-            if(line[i] == line[j]){
-                return true;
-            }
-        }
+    for (int i = 0; i < line.length() - 1; ++i) {
+        if (line[i] == line[i + 1]) return true;
     }
     return false;
 }
-bool containsStrings(std::string& line){
-    int i = 0;
-    int j = i +1;
-    int len = line.length();
-    while(j!= len){
 
-        std::string check;
-        check += line[i];
-        check += line[j];
-        if(check != s1 && check != s2 && check != s3 && check != s4){
-            i++;
-            j = i + 1;
-        }
-        else{
-            return true;
-        }
+bool containsForbiddenStrings(std::string& line){
+    for (int i = 0; i < line.length() - 1; ++i) {
+        std::string check = line.substr(i, 2);
+        if (check == "ab" || check == "cd" || check == "pq" || check == "xy") return true;
     }
     return false;
-    
 }
 
-int numberOfNice(std::ifstream& input, std::ofstream & output){
-    bool hasThreeVowels = false;
-    bool hasDoubleLetter = false;
-    bool containsString = true;
+int numberOfNice(std::ifstream& input) {
     std::string line;
     int count = 0;
-    while(getline(input, line, '\n')){
-        hasDoubleLetter = false;
-        hasThreeVowels = false;
-        containsString = true;
-        hasThreeVowels = ThreeVowels(line);
-        //if(!hasThreeVowels) continue;
-        hasDoubleLetter = twiceInARow(line);
-        //if(!hasDoubleLetter) continue;
-        containsString = containsStrings(line);
-        if(hasThreeVowels && hasDoubleLetter && !containsString) count++;
-        output << line << std::to_string(hasThreeVowels) << " " << std::to_string(hasDoubleLetter) << " "
-        << std::to_string(containsString) << "\n";
-       
+    while (getline(input, line)) {
+        if (ThreeVowels(line) && twiceInARow(line) && !containsForbiddenStrings(line)) {
+            count++;
+        }
     }
-
-
     return count;
 }
 
-int main(){
-
+int main() {
     std::ifstream input("input.txt");
-    std::ofstream outfile("outputDEBUGGING.txt", std::ios::app);
-    std::cout << numberOfNice(input, outfile) << std::endl;
+    if (!input) {
+        std::cerr << "Could not open file.\n";
+        return 1;
+    }
+
+    std::cout << numberOfNice(input) << std::endl;
 
     input.close();
-    outfile.close();
     return 0;
 }
