@@ -3,7 +3,7 @@
 #include <sstream>
 #include <string>
 
-void toggle_on(bool (&matrix)[1000][1000], int arr[4]){
+void toggle_on(int (&matrix)[1000][1000], int arr[4]){
     int fromRows = arr[1];
     int fromCols = arr[0];
     int toRows = arr[3];
@@ -14,7 +14,7 @@ void toggle_on(bool (&matrix)[1000][1000], int arr[4]){
         }
     }
 }
-void toggle_off(bool (&matrix)[1000][1000], int arr[4]){
+void toggle_off(int (&matrix)[1000][1000], int arr[4]){
     int fromRows = arr[1];
     int fromCols = arr[0];
     int toRows = arr[3];
@@ -25,7 +25,7 @@ void toggle_off(bool (&matrix)[1000][1000], int arr[4]){
         }
     }
 }
-void toggle(bool (&matrix)[1000][1000], int arr[4]){
+void toggle(int (&matrix)[1000][1000], int arr[4]){
     int fromRows = arr[1];
     int fromCols = arr[0];
     int toRows = arr[3];
@@ -42,7 +42,7 @@ int main(){
         std::cerr << "Could not open file.\n";
         return 1;
     }
-    bool matrix[1000][1000] = {false};
+    int matrix[1000][1000] = {false};
     std::string line;
     std::string command,action, coord1, through, coord2;
     int arr[4];
@@ -77,11 +77,13 @@ int main(){
             toggle(matrix, arr);
         }
     }
-    int count = 0;
+
+    //dun
+    int sum = 0;
     for(int i = 0; i < 1000; i++){
         for(int j = 0; j < 1000; j++){
-            if(matrix[i][j] == true) count++;
+            sum+= matrix[i][j];
         }
     }
-    std::cout << count << std::endl;
+    std::cout << sum << std::endl;
 }
