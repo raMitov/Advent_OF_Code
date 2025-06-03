@@ -10,7 +10,7 @@ void toggle_on(int (&matrix)[1000][1000], int arr[4]){
     int toCols = arr[2];
     for(int i = fromRows; i <= toRows; i++){
         for(int j = fromCols; j <= toCols; j++){
-            matrix[i][j] = true;
+            matrix[i][j] += 1;
         }
     }
 }
@@ -21,7 +21,9 @@ void toggle_off(int (&matrix)[1000][1000], int arr[4]){
     int toCols = arr[2];
     for(int i = fromRows; i <= toRows; i++){
         for(int j = fromCols; j <= toCols; j++){
-            matrix[i][j] = false;
+            if(matrix[i][j] > 0){
+                matrix[i][j] -= 1;
+            }
         }
     }
 }
@@ -32,7 +34,7 @@ void toggle(int (&matrix)[1000][1000], int arr[4]){
     int toCols = arr[2];
     for(int i = fromRows; i <= toRows; i++){
         for(int j = fromCols; j <= toCols; j++){
-            matrix[i][j] ^= 1;
+            matrix[i][j] += 2;
         }
     }
 }
